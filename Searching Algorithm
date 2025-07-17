@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void quickSort(vector<int>& data, int low, int high) {
+    if (low < high) {
+        int pivot = data[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (data[j] < pivot) {
+                i++;
+                swap(data[i], data[j]);
+            }
+        }
+        swap(data[i + 1], data[high]);
+        int partitionIndex = i + 1;
+        quickSort(data, low, partitionIndex - 1);
+        quickSort(data, partitionIndex + 1, high);
+    }
+}
+
+int binarySearch(const vector<int>& data, int target) {
+    int low = 0, high = data.size() - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (data[mid] == target) {
+            return mid;
+        }
+        else if (data[mid] < target) {
+            low = mid + 1;
+        }
+        else {
+            high = mid - 1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    vector<int> data;
+    int size, target;
+
+    cout << "Enter the size of the array: ";
+    cin >> size;
+    cout << "Enter the elements of the array:\n";
+    for (int i = 0; i < size; ++i) {
+        int num;
+        cin >> num;
+        data.push_back(num);
+    }
+
+    cout << "Enter the target value: ";
+    cin >> target;
+
+    quickSort(data, 0, data.size() - 1);
+
+    cout << "Sorted Array: ";
+    for (int i = 0; i != data.size(); i++) {
+        int num = data[i];
+        cout << num << " ";
+    }
+    cout << endl;
+
+    bool duplicate = false;
+    for (int i = 1; i < data.size(); ++i) {
+        if (data[i] == data[i - 1]) {
+            duplicate = true;
+            break;
+        }
+    }
+
+    if (duplicate) {
+        cout << "There are duplicate data here." << endl;
+    }
+    else {
+        int index = binarySearch(data, target);
+        if (index != -1) {
+            cout << "Element " << target << " found at index: " << index + 1 << endl;
+        }
+        else {
+            cout << "Element " << target << " not found in the array." << endl;
+        }
+    }
+
+    return 0;
+}
